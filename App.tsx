@@ -2,13 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Dashboard } from './components/Dashboard';
 import { WeeklyPlanner } from './components/WeeklyPlanner';
 import { WeeklyReview } from './components/WeeklyReview';
-import { LayoutGrid, Calendar, ClipboardList } from 'lucide-react';
+import { Login } from './components/Login';
+import { LayoutGrid, Calendar, ClipboardList, LogOut } from 'lucide-react'; // Added LogOut
 import { INITIAL_HABITS } from './constants';
 import { Habit } from './types';
 
 const STORAGE_KEY = 'pro-habit-tracker-data';
+// Simple password protection. In a real app, use a proper auth system.
+// You can change this password or use an environment variable (VITE_APP_PASSWORD)
+const APP_PASSWORD = import.meta.env.VITE_APP_PASSWORD || 'HabitTracker2025!';
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Check if user is already authenticated in this session
+    return sessionStorage.getItem('is_authenticated') === 'true';
+  });
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<'monthly' | 'weekly' | 'review'>('monthly');
 
@@ -21,6 +30,20 @@ export default function App() {
     }
     return false;
   });
+
+  const handleLogin = (password: string) => {
+    if (password === APP_PASSWORD) {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('is_authenticated', 'true');
+      return true;
+    }
+    return false;
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem('is_authenticated');
+  };
 
   // Shared Habit State (lifted from Dashboard to share with WeeklyPlanner)
   // Note: For a full refactor, we should move the complex habit logic from Dashboard to here or a Context.
@@ -120,11 +143,15 @@ export default function App() {
   // Use a key to force full remount when month changes
   const monthKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}`;
 
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />;
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 md:p-8 font-sans transition-colors duration-200">
 
-      {/* View Switcher */}
-      <div className="max-w-[1400px] mx-auto mb-6 flex justify-end">
+      {/* View Switcher and Logout */}
+      <div className="max-w-[1400px] mx-auto mb-6 flex justify-end gap-4">
         <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-800 flex gap-1 shadow-sm">
           <button
             onClick={() => setView('monthly')}
@@ -139,8 +166,8 @@ export default function App() {
           <button
             onClick={() => setView('weekly')}
             className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${view === 'weekly'
-                ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+              ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
               }`}
           >
             <Calendar size={16} />
@@ -149,14 +176,22 @@ export default function App() {
           <button
             onClick={() => setView('review')}
             className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${view === 'review'
-                ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+              ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
               }`}
           >
             <ClipboardList size={16} />
             Review
           </button>
         </div>
+
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:border-red-200 dark:hover:border-red-900 transition-colors shadow-sm"
+          title="Logout"
+        >
+          <LogOut size={18} />
+        </button>
       </div>
 
       {view === 'monthly' && (
