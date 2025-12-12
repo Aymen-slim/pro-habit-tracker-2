@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock } from 'lucide-react';
+import { Lock, Eye, EyeOff } from 'lucide-react';
 
 interface LoginProps {
     onLogin: (password: string) => boolean;
@@ -8,6 +8,7 @@ interface LoginProps {
 export const Login: React.FC<LoginProps> = ({ onLogin }) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,21 +40,31 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
                         >
                             Password
                         </label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                                setError(false);
-                            }}
-                            className={`w-full px-4 py-3 rounded-xl border ${error
-                                    ? 'border-red-500 focus:ring-red-500/20'
-                                    : 'border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-500/20'
-                                } bg-transparent text-slate-900 dark:text-white focus:outline-none focus:ring-4 transition-all`}
-                            placeholder="Enter password"
-                            autoFocus
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                id="password"
+                                value={password}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                    setError(false);
+                                }}
+                                className={`w-full px-4 py-3 pr-12 rounded-xl border ${error
+                                        ? 'border-red-500 focus:ring-red-500/20'
+                                        : 'border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-500/20'
+                                    } bg-transparent text-slate-900 dark:text-white focus:outline-none focus:ring-4 transition-all`}
+                                placeholder="Enter password"
+                                autoFocus
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
                         {error && (
                             <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
                                 Incorrect password. Please try again.
