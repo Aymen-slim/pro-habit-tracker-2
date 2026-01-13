@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><rect x=%222%22 y=%222%22 width=%2220%22 height=%2220%22 rx=%225%22 ry=%225%22 fill=%22%234f46e5%22 stroke=%22none%22/><path d=%22M9 12l2 2 4-4%22 stroke=%22white%22 stroke-width=%223%22/></svg>"
+    type="image/svg+xml" />
+  <title>Bloom Habit</title>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.1/+esm"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+  <script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
+  <script>
+    window.createLemonSqueezy = () => {
+      if (window.LemonSqueezy) {
+        window.LemonSqueezy.Setup({
+          eventHandler: (event) => {
+            console.log('LemonSqueezy event:', event);
+            if (event.event === 'Checkout.Success') {
+              window.dispatchEvent(new CustomEvent('payment-success'));
+            }
+          }
+        });
+      }
+    };
+    // Initialize LS once script is loaded
+    window.addEventListener('load', () => {
+      if (window.createLemonSqueezy) window.createLemonSqueezy();
+    });
+  </script>
+</head>
+
+<body class="bg-white dark:bg-slate-950 text-black dark:text-slate-200 antialiased transition-colors duration-200">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>
