@@ -4,9 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "npx serve dist -l 3000",
+    "dev:source": "vite",
+    "build": "echo Build skipped - using pre-built Firebase version in dist/",
+    "build:source": "vite build",
+    "preview": "npx serve dist -l 3000",
+    "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

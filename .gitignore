@@ -8,8 +8,15 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
 dist-ssr
+
+# Keep dist/ because it holds the pre-built Firebase version we deploy
+# dist
+
+# Local helper folders
+firebase-backup/
+firebase-download/
+.agent/
 
 # Editor directories and files
 .vscode/*
