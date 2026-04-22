@@ -8,12 +8,32 @@
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><rect x=%222%22 y=%222%22 width=%2220%22 height=%2220%22 rx=%225%22 ry=%225%22 fill=%22%234f46e5%22 stroke=%22none%22/><path d=%22M9 12l2 2 4-4%22 stroke=%22white%22 stroke-width=%223%22/></svg>"
     type="image/svg+xml" />
   <title>Bloom Habit</title>
-
-  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
-  <!-- Lemon Squeezy initialization is handled by the useLemonSqueezy React hook only for authenticated users -->
-  <script defer data-website-id="dfid_QvqlOBdoow5A8k4lTZ8cV" data-domain="bloom-habit.site"
-    src="https://datafa.st/js/script.js">
-    </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300..700&family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
+  <script>
+    window.createLemonSqueezy = () => {
+      if (window.LemonSqueezy) {
+        window.LemonSqueezy.Setup({
+          eventHandler: (event) => {
+            console.log('LemonSqueezy event:', event);
+            if (event.event === 'Checkout.Success') {
+              window.dispatchEvent(new CustomEvent('payment-success'));
+            }
+          }
+        });
+      }
+    };
+    // Initialize LS once script is loaded
+    window.addEventListener('load', () => {
+      if (window.createLemonSqueezy) window.createLemonSqueezy();
+    });
+  </script>
   <script type="importmap">
 {
   "imports": {
@@ -26,12 +46,12 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="assets/index-CK8p01sL.js"></script>
-  <link rel="stylesheet" crossorigin href="assets/index-CY5QPIPs.css">
+  <script type="module" crossorigin src="/assets/index-DtTkuAKD.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-abLklrwt.css">
 </head>
 
 <body class="bg-white dark:bg-slate-950 text-black dark:text-slate-200 antialiased transition-colors duration-200">
-  <div id="root"></div>
+  <div id="root"></div>
 </body>
 
 </html>
