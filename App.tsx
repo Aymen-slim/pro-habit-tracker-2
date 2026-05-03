@@ -98,6 +98,28 @@ const AppContent = ({
   const [currentView, setCurrentView] = useState<ViewType>('tracker');
   const { data, upgradeUserTier } = useStorage();
 
+  // Update document title based on internal view
+  useEffect(() => {
+    let title = 'Dashboard | Bloom Habit';
+    if (currentView === 'tracker') title = 'Habit Tracker | Bloom Habit';
+    else if (currentView === 'planner') title = 'Weekly Planner | Bloom Habit';
+    else if (currentView === 'review') title = 'Weekly Review | Bloom Habit';
+    else if (currentView === 'notes') title = 'Notes | Bloom Habit';
+    else if (currentView === 'settings') title = 'Settings | Bloom Habit';
+    else if (currentView === 'pricing') title = 'Pricing | Bloom Habit';
+
+    document.title = title;
+
+    // Explicitly notify GA of page view for internal view changes
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'page_view', {
+        page_title: title,
+        page_location: window.location.href,
+        page_path: window.location.pathname + '#' + currentView
+      });
+    }
+  }, [currentView]);
+
   const isPremium = data.userProfile?.tier === 'premium';
 
   useEffect(() => {
@@ -201,6 +223,38 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  // Update document title for SEO and Analytics
+  useEffect(() => {
+    let title = 'Bloom Habit';
+    
+    if (currentPath === '/pricing') {
+      title = 'Pricing | Bloom Habit';
+    } else if (currentPath === '/terms-and-conditions') {
+      title = 'Terms & Conditions | Bloom Habit';
+    } else if (currentPath === '/Privacy-Policy') {
+      title = 'Privacy Policy | Bloom Habit';
+    } else if (currentPath === '/Refund-Policy') {
+      title = 'Refund Policy | Bloom Habit';
+    } else if (currentPath === '/support') {
+      title = 'Support | Bloom Habit';
+    } else if (!session) {
+      title = 'Bloom Habit - Build habits that actually stick';
+    } else {
+      title = 'Dashboard | Bloom Habit';
+    }
+
+    document.title = title;
+    
+    // Explicitly notify GA of page view for SPA navigation if gtag is available
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'page_view', {
+        page_title: title,
+        page_location: window.location.href,
+        page_path: currentPath
+      });
+    }
+  }, [currentPath, session]);
 
   useEffect(() => {
     const handlePopState = () => {
